@@ -1,69 +1,27 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, CircularProgress, Container } from '@mui/material';
-import axios from 'axios';
+import { Button, Fab, Box } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import NavigationIcon from '@mui/icons-material/Navigation';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import SentimentAnalysisComponent from './SentimentAnalysisComponent';
+import TextSummarizationComponent from './TextSummarizationComponent';
 
-const SentimentAnalysisComponent = () => {
-  const [inputText, setInputText] = useState('');
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
+const App = () => {
+  const [showSentimentAnalysis, setShowSentimentAnalysis] = useState(true);
 
-  const handleInputChange = (e) => {
-    setInputText(e.target.value);
-  };
-
-  const handleSubmit = async () => {
-    setLoading(true);
-
-    try {
-      const response = await axios.post('https://web-production-f6f4.up.railway.app/sentiment-analysis', {
-        text: inputText,
-      });
-
-      setResult(response.data);
-    } catch (error) {
-      console.error('Error sending text:', error);
-    } finally {
-      setLoading(false);
-    }
+  const handleToggle = () => {
+    setShowSentimentAnalysis((prev) => !prev);
   };
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" align="center" gutterBottom>
-        Sentiment Analysis
-      </Typography>
-      <div>
-        <TextField
-          label="Enter Text"
-          multiline
-          rows={4}
-          variant="outlined"
-          fullWidth
-          value={inputText}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div style={{ marginTop: '1rem' }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-          disabled={loading}
-          fullWidth
-        >
-          {loading ? <CircularProgress size={24} color="inherit" /> : 'Analyze Sentiment'}
-        </Button>
-      </div>
-      {result && (
-        <div style={{ marginTop: '2rem' }}>
-          <Typography variant="h5">Analysis Result:</Typography>
-          <Typography>Sentiment: {result.sentiment}</Typography>
-          <Typography>Polarity: {result.polarity}</Typography>
-          <Typography>Subjectivity: {result.subjectivity}</Typography>
-        </div>
-      )}
-    </Container>
+    <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <Button variant="outlined" color="primary" onClick={handleToggle}>
+        {showSentimentAnalysis ? 'Switch to Text Summarization' : 'Switch to Sentiment Analysis'}
+      </Button>
+      {showSentimentAnalysis ? <SentimentAnalysisComponent /> : <TextSummarizationComponent />}
+    </div>
   );
 };
 
-export default SentimentAnalysisComponent;
+export default App;
