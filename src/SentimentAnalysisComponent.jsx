@@ -15,7 +15,7 @@ const SentimentAnalysisComponent = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://sentimentapi-production.up.railway.app/sentiment-analysis', {
+      const response = await axios.post('http://localhost:8000/sentiment-analysis', {
         text: inputText,
       });
 
