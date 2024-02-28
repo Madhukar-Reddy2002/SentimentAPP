@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.paper {
+  padding: 2rem;
+  border-radius: 20px;
+  background: #605c5c;
+  box-shadow: 5px 5px 15px #c4c4c4, -5px -5px 15px #ffffff;
+}
+.negative-bg {
+  background-color: #ffcccc; /* Light red for negative polarity */
+}
+.analyze-button {
+  margin-top: 1rem;
+  background: #64b5f6;
+}
+
+.circular-progress {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.neumorphism {
+  border-radius: 50px;
+  background: #605c5c;
+  box-shadow: inset 20px 20px 60px #312e2e,
+            inset -20px -20px 60px #6e6a6a;
+}
+.box{
+  width: 120px;
+  padding: 5px;
+  border-radius: 26px;
+  background: #605c5c;
+  box-shadow: inset 20px 20px 40px #323030,
+              inset -20px -20px 40px #8e8888;
+}
+.grid{
+  margin-top: 10px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+}
