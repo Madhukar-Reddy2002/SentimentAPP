@@ -1,4 +1,3 @@
-// App.jsx
 import React, { useState } from 'react';
 import {
   Button,
@@ -10,9 +9,10 @@ import {
   Grid,
   createTheme,
   ThemeProvider,
+  Box
 } from '@mui/material';
 import axios from 'axios';
-import './assets/app.css';
+import './app.css';
 
 const App = () => {
   const [inputText, setInputText] = useState('');
@@ -63,10 +63,9 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="sm" className="container">
-        <Paper
-          elevation={3}
-          className={`paper neumorphism ${polarity !== null && polarity < 0 ? 'negative-bg' : ''}`}
+      <Box className="container">
+        <Box
+          className='neumorphism paper'
         >
           <Typography variant="h4" gutterBottom>
             Sentiment Analyzer
@@ -93,7 +92,7 @@ const App = () => {
           </Button>
 
           {/* Display Sentiment Label */}
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5" gutterBottom className='sentiment'>
             Sentiment: {sentimentLabel}
           </Typography>
 
@@ -115,7 +114,7 @@ const App = () => {
 
             {/* Circular Progress for Polarity */}
             {polarity !== null && (
-              <Grid item  className='box'>
+              <Grid item className='box'>
                 <div className="circular-progress">
                   <Typography variant="body1">Polarity:</Typography>
                   <CircularProgress
@@ -128,8 +127,8 @@ const App = () => {
               </Grid>
             )}
           </Grid>
-        </Paper>
-      </Container>
+        </Box>
+      </Box>
     </ThemeProvider>
   );
 };
