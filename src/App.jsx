@@ -12,7 +12,7 @@ import {
   Box
 } from '@mui/material';
 import axios from 'axios';
-import './app.css';
+import './assets/app.css';
 
 const App = () => {
   const [inputText, setInputText] = useState('');
