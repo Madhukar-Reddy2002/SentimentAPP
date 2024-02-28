@@ -1,42 +1,51 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/* app.css */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.paper {
   padding: 2rem;
-  text-align: center;
+  border-radius: 20px;
+  background: #605c5c;
+  box-shadow: 5px 5px 15px #c4c4c4, -5px -5px 15px #ffffff;
+}
+.negative-bg {
+  background-color: #ffcccc; /* Light red for negative polarity */
+}
+.analyze-button {
+  margin-top: 1rem;
+  background: #64b5f6;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.circular-progress {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.neumorphism {
+  border-radius: 50px;
+  background: #605c5c;
+  box-shadow: inset 20px 20px 60px #312e2e,
+            inset -20px -20px 60px #6e6a6a;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.box{
+  width: 120px;
+  padding: 5px;
+  border-radius: 26px;
+  background: #605c5c;
+  box-shadow: inset 20px 20px 40px #323030,
+              inset -20px -20px 40px #8e8888;
 }
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.grid{
+  margin-top: 10px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
 }

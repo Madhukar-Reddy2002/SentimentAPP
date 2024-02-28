@@ -1,3 +1,4 @@
+// App.jsx
 import React, { useState } from 'react';
 import {
   Button,
@@ -5,110 +6,131 @@ import {
   Container,
   TextField,
   Typography,
-  Checkbox,
+  Paper,
+  Grid,
+  createTheme,
+  ThemeProvider,
 } from '@mui/material';
 import axios from 'axios';
+import './app.css';
 
 const App = () => {
   const [inputText, setInputText] = useState('');
-  const [invertSentiment, setInvertSentiment] = useState(false);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [subjectivity, setSubjectivity] = useState(null);
+  const [polarity, setPolarity] = useState(null);
+  const [sentimentLabel, setSentimentLabel] = useState('');
+  const [colour, setColour] = useState(null);
+
+  const theme = createTheme({
+    palette: {
+      mode: 'light',
+    },
+  });
 
   const handleInputChange = (e) => {
     setInputText(e.target.value);
-  };
-
-  const handleInvertChange = (e) => {
-    setInvertSentiment(e.target.checked);
   };
 
   const handleSubmit = async () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/invert', {
+      const response = await axios.post('https://sentimentapi2-production.up.railway.app/analyze', {
         text: inputText,
-        invert_to: invertSentiment ? 'negative' : 'positive',
       });
 
-      setResult(response.data);
+      const { sentiment, text } = response.data;
+      setResult({ sentiment, text });
+      setSubjectivity(sentiment.subjectivity);
+      setPolarity(sentiment.polarity);
+      setSentimentLabel(sentiment.label);
+
+      if (sentiment.label === 'Positive') {
+        setColour('green');
+      } else if (sentiment.label === 'Negative') {
+        setColour('red');
+      } else {
+        setColour('orange');
+      }
     } catch (error) {
-      console.error('Error inverting sentiment:', error);
+      console.error('Error analyzing text:', error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Container
-      maxWidth="md"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: '2rem',
-      }}
-    >
-      <Typography variant="h4" align="center" gutterBottom>
-        Sentiment Inverter
-      </Typography>
-      <div style={{ width: '100%' }}>
-        <TextField
-          label="Enter Text"
-          multiline
-          rows={4}
-          variant="outlined"
-          fullWidth
-          value={inputText}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div style={{ marginTop: '1rem', width: '100%' }}>
-        <Checkbox
-          checked={invertSentiment}
-          onChange={handleInvertChange}
-        />
-        <label>Invert Sentiment</label>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-          disabled={loading}
-          fullWidth
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="sm" className="container">
+        <Paper
+          elevation={3}
+          className={`paper neumorphism ${polarity !== null && polarity < 0 ? 'negative-bg' : ''}`}
         >
-          {loading ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            'Invert Sentiment'
-          )}
-        </Button>
-      </div>
-      {result && (
-        <div style={{ marginTop: '2rem', width: '100%' }}>
-          <Typography variant="h5">Original Text:</Typography>
-          <Typography variant="body1">{result.original_text}</Typography>
-          <Typography variant="h5">Sentiment Analysis:</Typography>
-          <Typography variant="body1">
-            Sentiment: {result.sentiment_analysis.sentiment}
+          <Typography variant="h4" gutterBottom>
+            Sentiment Analyzer
           </Typography>
-          <Typography variant="body1">
-            Polarity: {result.sentiment_analysis.polarity}
+          <TextField
+            label="Enter Text"
+            multiline
+            rows={4}
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={inputText}
+            onChange={handleInputChange}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            disabled={loading}
+            fullWidth
+            className="analyze-button"
+          >
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Analyze Sentiment'}
+          </Button>
+
+          {/* Display Sentiment Label */}
+          <Typography variant="h5" gutterBottom>
+            Sentiment: {sentimentLabel}
           </Typography>
-          <Typography variant="body1">
-            Subjectivity: {result.sentiment_analysis.subjectivity}
-          </Typography>
-          {invertSentiment && (
-            <div>
-              <Typography variant="h5">Inverted Sentiment:</Typography>
-              <Typography variant="body1">
-                Inverted Text: {result.inverted_text}
-              </Typography>
-            </div>
-          )}
-        </div>
-      )}
-    </Container>
+
+          <Grid container spacing={2} className='grid'>
+            {/* Circular Progress for Subjectivity */}
+            {subjectivity !== null && (
+              <Grid item className='box'>
+                <div className="circular-progress">
+                  <Typography variant="body1">Subjectivity:</Typography>
+                  <CircularProgress
+                    variant="determinate"
+                    value={subjectivity * 100}
+                    style={{ color: 'green' }}
+                  />
+                  <Typography variant="body1">{(subjectivity * 100).toFixed(2)}%</Typography>
+                </div>
+              </Grid>
+            )}
+
+            {/* Circular Progress for Polarity */}
+            {polarity !== null && (
+              <Grid item  className='box'>
+                <div className="circular-progress">
+                  <Typography variant="body1">Polarity:</Typography>
+                  <CircularProgress
+                    variant="determinate"
+                    value={(polarity + 1) * 50}
+                    style={{ color: colour }}
+                  />
+                  <Typography variant="body1">{(polarity * 100).toFixed(2)}%</Typography>
+                </div>
+              </Grid>
+            )}
+          </Grid>
+        </Paper>
+      </Container>
+    </ThemeProvider>
   );
 };
 
